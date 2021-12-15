@@ -48,7 +48,6 @@ class SavedFragment : Fragment() {
     private fun setAdapter() {
         adapter = RvAdapter(loadData().value!!, object : RvAdapter.itemOnCLick {
             override fun itemClick(valyuta: ValyutaEntity, position: Int) {
-                Toast.makeText(requireContext(), "saved item clicked", Toast.LENGTH_SHORT).show()
             }
 
             override fun itemSaveClick(valyuta: ValyutaEntity, position: Int, item: RvItemBinding) {
@@ -57,6 +56,9 @@ class SavedFragment : Fragment() {
                 if (!valyuta.saved) {
                     try {
                         mainViewModel.dao().deleteById(valyuta.code)
+                        adapter.notifyItemRemoved(position)
+                        list.value?.remove(valyuta)
+                        list.value?.size?.let { adapter.notifyItemRangeRemoved(position, it) }
                     } catch (e: Exception) {
                         Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                     }

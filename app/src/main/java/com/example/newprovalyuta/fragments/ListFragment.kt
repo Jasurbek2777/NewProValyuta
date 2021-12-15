@@ -89,12 +89,12 @@ class ListFragment : Fragment() {
                     dialog.et1.addTextChangedListener {
                         try {
                             if (it.toString().isNotEmpty()) {
-                                dialog.et2.setText(
-                                    (it.toString()
-                                        .toDouble() * (valyuta.cb_price.toDouble() / 1)).toString()
-                                )
-                            }else{
-                                dialog.et2.setText("0")
+                                var text = ((it.toString().toDouble()) * (valyuta.cb_price.toDouble())).toLong().toString()
+                                text = if (text.contains(".")) text.subSequence(0, text.indexOf(".")).toString()
+                                    else text
+                                dialog.et2.text = text
+                            } else {
+                                dialog.et2.text = "0"
                             }
                         } catch (e: Exception) {
                             Toast.makeText(requireContext(), "Number only", Toast.LENGTH_SHORT)
